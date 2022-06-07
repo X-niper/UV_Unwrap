@@ -140,6 +140,7 @@ class Mesh_attribute_processor:
     def get_rescaled_verts(self, obj_path:str)->np.ndarray:
         verts, _, _ = load_obj(obj_path, load_textures=False)
         verts = verts.cpu().numpy()
+        print(verts.max(), verts.min())
         verts = verts * self.rescale_factor + self.offset_factor
         if np.any(verts<0):
             print('warning, negative value detected')
@@ -152,10 +153,10 @@ class Mesh_attribute_processor:
         
         
 if __name__ == "__main__":
-    template_obj_path = 'test.obj'
+    template_obj_path = 'cow.obj'
     test_obj_path = template_obj_path
     unwrapper = UV_unwrapper(template_obj_path, target_size=4096)
-    mesh_attribute_processor = Mesh_attribute_processor(rescale_factor=1/300, offset_factor=0.5)
+    mesh_attribute_processor = Mesh_attribute_processor(rescale_factor=1/3, offset_factor=0.5)
 
     verts_rescaled = mesh_attribute_processor.get_rescaled_verts(test_obj_path)
     print(verts_rescaled.max(), verts_rescaled.min())
